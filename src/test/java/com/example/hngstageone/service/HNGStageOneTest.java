@@ -32,7 +32,7 @@ public class HNGStageOneTest {
 
     @Test
     public void getTemperature() throws IOException, URISyntaxException, InterruptedException {
-        String weather = stageOneService.getWeather(6.5396437, 3.3457955);
+        String weather = stageOneService.getWeather();
         System.out.println("Weather == " + weather);
     }
 }

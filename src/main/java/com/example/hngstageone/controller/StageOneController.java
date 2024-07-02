@@ -28,7 +28,7 @@ public class StageOneController {
         Map<String, Object> response = new HashMap<>();
         String clientIp = stageOneService.getClientIp(request);
         String location = stageOneService.getLocation(request);
-        String temperature = stageOneService.getWeather(6.5396437, 3.3457955);
+        String temperature = stageOneService.getWeather();
 
         response.put("client_ip", clientIp);
         response.put("greeting", String.format("Hello, %s! the temperature is %s degree Celcius in %s", visitorName, temperature, location));

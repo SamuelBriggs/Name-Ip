@@ -26,8 +26,6 @@ import static com.example.hngstageone.Utils.*;
 @Service
 public class HNGStageOne implements StageOneService {
 
-    @Autowired
-    private HttpServletRequest request;
 
     @Override
     public String getClientIp(HttpServletRequest request) {
@@ -41,7 +39,7 @@ public class HNGStageOne implements StageOneService {
 
 
     public String getLocation(HttpServletRequest request) throws URISyntaxException, IOException {
-        String ipAddress = "8.8.8.8";
+        String ipAddress = getClientIp(request);
         String uriString = String.format("https://ipapi.co/%s/json/", ipAddress);
         URI ipapiUri = new URI(uriString);
 
@@ -58,7 +56,6 @@ public class HNGStageOne implements StageOneService {
                 }
             } else {
                 System.err.println("HTTP request failed with status code: " + statusCode);
-                // Handle error cases
             }
         } catch (IOException e) {
             System.err.println("HTTP request failed: " + e.getMessage());
@@ -71,11 +68,11 @@ public class HNGStageOne implements StageOneService {
     }
 
 
-    public String getWeather(double latitude, double longitude) throws URISyntaxException, IOException, InterruptedException {
-//        JsonNode object = getLocationCoordinates();
-//
-//        double longitude = Double.parseDouble(String.valueOf(object.asLong(Long.parseLong("lng"))));
-//        double latitude = Double.parseDouble(String.valueOf(object.asLong(Long.parseLong("lat"))));
+    public String getWeather() throws URISyntaxException, IOException, InterruptedException {
+        JsonNode object = getLocationCoordinates();
+
+        double latitude = object.get("lat").asDouble();
+        double longitude = object.get("lng").asDouble();
 
         String uriString = String.format("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current_weather=true", latitude, longitude);
         URI weatherUri = new URI(uriString);
