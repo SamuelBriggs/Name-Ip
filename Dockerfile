@@ -3,10 +3,10 @@ COPY . .
 RUN mvn install -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
-COPY --from=build /target/Hello-Client-0.0.1-SNAPSHOT.jar Hello-Client.jar
+COPY --from=build /target/hng-stage-one-0.0.1-SNAPSHOT.jar Hello-Client.jar
 
 EXPOSE  8080
-ENTRYPOINT ["java", "-jar","Hello-Client.jar"]
+ENTRYPOINT ["java", "-jar","hng-stage-one-0.0.1-SNAPSHOT.jar"]
 
 
 
