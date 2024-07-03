@@ -1,7 +1,7 @@
 package com.example.hngstageone.service;
 
+import com.example.hngstageone.Utils;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -9,16 +9,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static com.example.hngstageone.Utils.*;
 
@@ -29,17 +24,20 @@ public class HNGStageOne implements StageOneService {
 
     @Override
     public String getClientIp(HttpServletRequest request) {
-        String ipAddressFromProxy = request.getHeader("X-Forward-For");
-        if (ipAddressFromProxy == null || ipAddressFromProxy.isEmpty()){
-//            System.out.println("Res == " + request.getHeader("X-Real-IP"));
-            return request.getRemoteAddr();
-        }
-        return ipAddressFromProxy;
+        String ipAddressFromProxy = request.getHeader("X-Forwarded-For");
+        if (ipAddressFromProxy == null || ipAddressFromProxy.isEmpty()) ipAddressFromProxy = request.getHeader("X-Real-IP");
+        if (ipAddressFromProxy == null || ipAddressFromProxy.isEmpty()) return request.getRemoteAddr();
+        return ipAddressFromProxy.split(",")[0].trim();
     }
 
 
     public String getLocation(HttpServletRequest request) throws URISyntaxException, IOException {
         String ipAddress = getClientIp(request);
+
+        if ("127.0.0.1".equals(ipAddress) || "0:0:0:0:0:0:0:1".equals(ipAddress)) {
+            ipAddress = "8.8.8.8";
+        }
+
         String uriString = String.format("https://ipapi.co/%s/json/", ipAddress);
         URI ipapiUri = new URI(uriString);
 
@@ -69,7 +67,8 @@ public class HNGStageOne implements StageOneService {
 
 
     public String getWeather() throws URISyntaxException, IOException, InterruptedException {
-        JsonNode object = getLocationCoordinates();
+        Utils utils = new Utils();
+        JsonNode object = utils.getLocationCoordinates();
 
         double latitude = object.get("lat").asDouble();
         double longitude = object.get("lng").asDouble();

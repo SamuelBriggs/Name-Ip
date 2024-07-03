@@ -2,7 +2,12 @@ package com.example.hngstageone;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,14 +16,19 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Service
 public class Utils {
 
-   // @Value("${google.location.apikey}")
+
     private static final String GOOGLE_APIKEY = System.getenv("googleKey");
 
 
-    public static JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
-        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key=" + GOOGLE_APIKEY;
+
+
+
+    public  JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
+
+        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key="+ GOOGLE_APIKEY;
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = "{}";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(jsonBody)).uri(new URI(baseUrl)).header("Content-Type", "application/json").build();
@@ -35,12 +45,14 @@ public class Utils {
 
 
     public static String extractCountryNameFromJson(String jsonResponse) {
-        System.out.println(jsonResponse);
-        int startIndex = jsonResponse.indexOf("\"country_name\":\"") + "\"country_name\":\"".length();
-        System.out.println(startIndex);
-        int endIndex = jsonResponse.indexOf("\"", startIndex);
-        System.out.println(endIndex);
-        return jsonResponse.substring(startIndex, endIndex);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+            return jsonNode.get("country_name").asText();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
 
