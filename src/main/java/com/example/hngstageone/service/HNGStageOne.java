@@ -33,6 +33,7 @@ public class HNGStageOne implements StageOneService {
 
     public String getLocation(HttpServletRequest request) throws URISyntaxException, IOException {
         String ipAddress = getClientIp(request);
+        System.out.println("Ip Address - " + ipAddress);
 
         if ("127.0.0.1".equals(ipAddress) || "0:0:0:0:0:0:0:1".equals(ipAddress)) {
             ipAddress = "8.8.8.8";
@@ -50,6 +51,7 @@ public class HNGStageOne implements StageOneService {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
                     String jsonResponse = EntityUtils.toString(entity);
+                    System.out.println("Response = " + jsonResponse);
                     return extractCountryNameFromJson(jsonResponse);
                 }
             } else {

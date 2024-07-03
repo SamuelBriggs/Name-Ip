@@ -25,7 +25,6 @@ public class Utils {
 
 
     public  JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
-        System.out.println("apikey == " + googleApiKey);
         String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key="+googleApiKey;
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = "{}";
@@ -46,6 +45,7 @@ public class Utils {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+            System.out.println("Country Name = " + jsonNode.get("country_name").asText());
             return jsonNode.get("country_name").asText();
         } catch (IOException exception) {
             exception.printStackTrace();
