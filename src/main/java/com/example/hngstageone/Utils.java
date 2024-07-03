@@ -16,14 +16,12 @@ public class Utils {
     @Value("${google.location.apikey}")
     private static String GOOGLE_APIKEY;
 
-    public static JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
-        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key="+GOOGLE_APIKEY;
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .POST(HttpRequest.BodyPublishers.noBody())
-                .uri(new URI(baseUrl))
-                .build();
 
+    public static JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
+        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key=" + GOOGLE_APIKEY;
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = "{}";
+        HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(jsonBody)).uri(new URI(baseUrl)).header("Content-Type", "application/json").build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() == 200) {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -54,11 +52,4 @@ public class Utils {
     }
 
 
-
-    public static HttpResponse<String> sendRequest(HttpRequest request) throws IOException, InterruptedException {
-        HttpResponse<String> response;
-        HttpClient httpClient = HttpClient.newHttpClient();
-        response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        return response;
-    }
 }

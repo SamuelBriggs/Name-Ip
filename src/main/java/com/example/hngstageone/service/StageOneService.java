@@ -13,5 +13,6 @@ public interface StageOneService {
 
     String getLocation(HttpServletRequest request) throws IOException, URISyntaxException;
 
-    String getWeather(double latitude, double longitude) throws URISyntaxException, IOException, InterruptedException;
+    String getWeather() throws URISyntaxException, IOException, InterruptedException;
+
 }
