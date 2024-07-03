@@ -13,8 +13,8 @@ import java.net.http.HttpResponse;
 
 public class Utils {
 
-    @Value("${google.location.apikey}")
-    private static String GOOGLE_APIKEY;
+   // @Value("${google.location.apikey}")
+    private static final String GOOGLE_APIKEY = System.getenv("googleKey");
 
 
     public static JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
