@@ -41,8 +41,8 @@ public class Utils {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonResponse);
-            System.out.println("Country Name = " + jsonNode.get("country_name").asText());
-            return jsonNode.get("country_name").asText();
+            System.out.println("City = " + jsonNode.get("city").asText());
+            return jsonNode.get("city").asText();
         } catch (IOException exception) {
             exception.printStackTrace();
         }
