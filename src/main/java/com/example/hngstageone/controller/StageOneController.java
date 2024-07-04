@@ -26,16 +26,11 @@ public class StageOneController {
 
     @GetMapping("/api/hello")
     public ResponseEntity<?> helloVisitor(@RequestParam String visitorName, HttpServletRequest request) throws IOException, URISyntaxException, InterruptedException {
-//        Map<String, Object> response = new HashMap<>();
         String clientIp = stageOneService.getClientIp(request);
         String city = stageOneService.getLocation(request);
         String temperature = stageOneService.getWeather();
 
         ApiResponse response = ApiResponse.builder().client_ip(clientIp).location(city).greeting(String.format("Hello, %s! the temperature is %s degree Celcius in %s", visitorName, temperature, city)).build();
-        System.out.println(response);
-//        response.put("client_ip", clientIp);
-//        response.put("greeting", String.format("Hello, %s! the temperature is %s degree Celcius in %s", visitorName, temperature, city));
-//        response.put("location", city);
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
