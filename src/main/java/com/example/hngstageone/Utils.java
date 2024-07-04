@@ -16,12 +16,15 @@ import java.net.http.HttpResponse;
 public class Utils {
 
 
-    @Value("${google.location.apikey}")
-    private String googleApiKey;
+
+//    @Value("${google.location.apikey}")
+//    private String googleApiKey;
+
+    private static final String GOOGLE_APIKEY = System.getenv("googleKey");
 
 
     public  JsonNode getLocationCoordinates() throws URISyntaxException, IOException, InterruptedException {
-        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key="+googleApiKey;
+        String baseUrl = "https://www.googleapis.com/geolocation/v1/geolocate?key="+ GOOGLE_APIKEY;
         HttpClient client = HttpClient.newHttpClient();
         String jsonBody = "{}";
         HttpRequest request = HttpRequest.newBuilder().POST(HttpRequest.BodyPublishers.ofString(jsonBody)).uri(new URI(baseUrl)).header("Content-Type", "application/json").build();
