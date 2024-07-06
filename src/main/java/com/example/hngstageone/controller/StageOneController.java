@@ -25,7 +25,7 @@ public class StageOneController {
     private StageOneService stageOneService;
 
     @GetMapping("/api/hello")
-    public ResponseEntity<?> helloVisitor(@RequestParam String visitorName, HttpServletRequest request) throws IOException, URISyntaxException, InterruptedException {
+    public ResponseEntity<?> helloVisitor(@RequestParam String visitor_name, HttpServletRequest request) throws IOException, URISyntaxException, InterruptedException {
         String clientIp = stageOneService.getClientIp(request);
         String city = stageOneService.getLocation(request);
         String temperature = stageOneService.getWeather();
