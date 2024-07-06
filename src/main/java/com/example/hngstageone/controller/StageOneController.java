@@ -30,7 +30,7 @@ public class StageOneController {
         String city = stageOneService.getLocation(request);
         String temperature = stageOneService.getWeather();
 
-        ApiResponse response = ApiResponse.builder().client_ip(clientIp).location(city).greeting(String.format("Hello, %s! the temperature is %s degree Celcius in %s", visitorName, temperature, city)).build();
+        ApiResponse response = ApiResponse.builder().client_ip(clientIp).location(city).greeting(String.format("Hello, %s! the temperature is %s degree Celcius in %s", visitor_name, temperature, city)).build();
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
